@@ -6,8 +6,6 @@ from datetime import datetime
 
 # Create your models here.
 class Profile(models.Model):
-    # user = models.ForeignKey(User,on_delete=models.CASCADE)
-    # id_user = models.IntegerField(primary_key=True,default=0)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(blank=True,default='')
     profileimg = models.ImageField(upload_to='profile_images',default='fstimg.webp')
@@ -16,8 +14,6 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
     
-
-
 class Post(models.Model):
     id = models.UUIDField(primary_key=True,default=uuid.uuid4)
     user = models.CharField( max_length=100)

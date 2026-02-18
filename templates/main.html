@@ -1,151 +1,3 @@
-{% comment %} 
-{% load static %}
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://kit.fontawesome.com/cb792c0850.js" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
-    <title>Social Media</title>
-    <link rel="stylesheet" href="{% static 'css/app.css' %}">
-    <style>
-        /* Custom styles for the sidebar */
-        .sidebar {
-            background-color: #f8f9fa;
-            height: 100vh;
-            color: black;
-        }
-
-        .profile-pic {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        a {
-            color: black;
-        }
-    </style>
-</head>
-
-<body>
-   <!-- this a modal code -->
- <div class="container-fluid">
-    <div class="row">
-        <nav class="col-md-2 d-none d-md-block sidebar" style="position: fixed;">
-            <div class="text-center mt-3">
-                <img src="{{profile.profileimg.url}}" alt="Profile Picture" class="profile-pic">
-                <h4 class="mt-2"><a href="/profile/{{user}}" style="text-decoration:none;">@{{user}}</a></h4>
-            </div>
-            <ul class="nav flex-column mt-4">
-                <li class="nav-item">
-                    <a class="nav-link active" href="{% url 'home' %}">
-                        <i class="fa-solid fa-house mr-1"></i> Home
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/explore">
-                        <i class="fa-solid fa-compass mr-1"></i> Explore
-                    </a>
-                </li>
-                <li class="nav-item">
-                       <a class="nav-link" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#exampleModal3">
-
-                        <i class="fa-solid fa-magnifying-glass mr-1"></i> Search
-                    </a>
-                </li>
-                
-                <li class="nav-item">
-
-                    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                            data-bs-whatever="@getbootstrap">
-                            <i class="fa-solid fa-circle-plus mr-1"></i> Create Post
-                        </a>
-                
-
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'profile' request.user.username %}">
-     
-                        <i class="fa-solid fa-user mr-1"></i> Profile
-                    </a>
-
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">
-
-                        <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
-                    </a>
-                </li>
-            </ul>
-        </nav>
-        <!-- this is the main content code -->
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-            <!-- Your main content goes here -->
-        
-            {% include "modal.html" %}
-            {% include "search.html" %}
-        
-        <!-- home posts code -->
-            <div>{% for post in posts %}
-                <div class="container" id="{{post.id}}">
-                    <div class="row">
-                        <div class="col-md-6 mx-auto">
-                            <div class="post-card"style="border: 1px solid black;margin: 50px;">
-
-                                    {% if post.image %}
-    <img src="{{ post.image.url }}" style="width:300px;">
-{% endif %}
-
-                                <div class="post-content"style="margin-left: 19px;">
-                                    <h5><a href="/profile/{{post.user}}" style="text-decoration: none;">@{{post.user}}</a></h5>
-                                    <p>{{post.caption}}</p>
-                                    <p class="text-muted">{{post.created_at}}</p>
-                                    <hr>
-                                    <div class="d-flex justify-content-between" style="margin-bottom: 8px; margin-right:10px;">
-            
-
-                                        <a href="/like-post/{{post.id}}#post{{post.id}}"
-class="btn {% if post.liked %}btn-primary{% else %}btn-outline-primary{% endif %}">
-{% if post.liked %}Liked{% else %}Like{% endif %}
-</a>
-           
-                                        {% if post.no_of_likes == 0 %}
-                                        <p>0</p>
-                                        {% elif post.no_of_likes == 1 %}
-                                        <p>Liked by {{post.no_of_likes}} person</p>
-                                        {% else %}
-                                        <p>Liked by {{post.no_of_likes}} people</p>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            
-            </div>   
-        </main>
-
-    </div>
-</div>
-   
- <script src="{% static 'js/app.js'%}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>  
-
-</body>
-
-</html> {% endcomment %}
-
 {% load static %}
 
 <!DOCTYPE html>
@@ -287,7 +139,7 @@ class="btn btn-dark">
 </li>
 
 <li class="nav-item">
-<a class="nav-link" href="/explore">
+<a class="nav-link" href="{% url 'explore' %}">
 <i class="fa-solid fa-compass"></i> Explore
 </a>
 </li>
@@ -331,7 +183,6 @@ class="btn btn-dark">
 <div class="container" id="post{{post.id}}">
 <div class="row">
 <div class="col-md-6 mx-auto">
-
 <div class="post-card">
 
 {% if post.image %} <img src="{{post.image.url}}" class="post-img" onclick="openImg(this.src)">
@@ -353,14 +204,22 @@ class="btn btn-dark">
 <div style="font-size:24px;display:flex;gap:25px;">
 
 <!-- LIKE -->
-
-<a href="/like-post/{{post.id}}#post{{post.id}}">
+{% comment %} <a href="{% url 'like-post' post.id %}">
 {% if post.liked %}
 <i class="fa-solid fa-heart" style="color:red;"></i>
 {% else %}
 <i class="fa-regular fa-heart"></i>
 {% endif %}
+</a> {% endcomment %}
+<a href="/like-post/{{post.id}}">
+    {% if post.liked %}
+        <i class="fa-solid fa-heart" style="color:red;"></i>
+    {% else %}
+        <i class="fa-regular fa-heart"></i>
+    {% endif %}
 </a>
+
+
 
 <i class="fa-regular fa-comment"></i> <i class="fa-solid fa-paper-plane"></i>
 
@@ -401,6 +260,8 @@ document.getElementById("imgPopup").style.display="none";
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
 
 </body>
 </html>

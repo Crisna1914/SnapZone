@@ -9,7 +9,6 @@
     
             <div class="modal-body">
                 <form action="{% url 'upload' %}" method="POST" enctype="multipart/form-data">
-                {% comment %} <form action="upload" method="POST" enctype="multipart/form-data"> {% endcomment %}
                     {% csrf_token %}
                     <div class="mb-3">
                         <img src="{% static 'css/upload.png' %}" alt="" class="m-1">

@@ -12,7 +12,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as auth_logout
 
 
-
+def landing(request):
+    return render(request, 'landing.html')
 
 
 def signup(request):
@@ -30,8 +31,7 @@ def signup(request):
             email=emailid,
             password=pwd
         )
-        # create profile
-       # Profile.objects.create(user=my_user)
+
 
         return redirect('login')
 
@@ -41,47 +41,25 @@ def signup(request):
 
 
 def login(request):
-    if request.method =='POST':
-        fnm=request.POST.get('fnm')
-        pwd=request.POST.get('pwd')
-        print(fnm,pwd)
+    if request.method == 'POST':
+        fnm = request.POST.get('fnm')
+        pwd = request.POST.get('pwd')
+
         user = authenticate(request, username=fnm, password=pwd)
 
         if user is not None:
-            auth_login(request,user)
-            return redirect('/')
-        invalid = "Invalid Credentails"
-        return render(request,'login.html',{'invalid':invalid})
-    return render(request,'login.html')
+            auth_login(request, user)
+            return redirect('home')   # 🔥 go to home page after login
+        else:
+            invalid = "Invalid Credentials"
+            return render(request, 'login.html', {'invalid': invalid})
 
+    return render(request, 'login.html')
 
 
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from .models import Post
-
-# @login_required(login_url='login')
-# def upload(request):
-
-#     if request.method == 'POST' and request.FILES.get('image_upload'):
-
-#         user = request.user.username   # 🔥 IMPORTANT FIX
-#         image = request.FILES.get('image_upload')
-#         caption = request.POST.get('caption')
-
-#         new_post = Post.objects.create(
-#             user=user,     # string username save
-#             image=image,
-#             caption=caption
-#         )
-#         new_post.save()
-
-#         return redirect('profile', id_user=user)
-
-#     return redirect('profile', id_user=request.user.username)
-
-
-
 
 @login_required(login_url='/login')
 def upload(request):
@@ -103,6 +81,8 @@ def upload(request):
 
     return redirect('/')
 
+
+
 @login_required(login_url='/login')
 def likes(request, id):
     if request.method == 'GET':
@@ -112,15 +92,15 @@ def likes(request, id):
         like_filter = LikePost.objects.filter(post_id=id, username=username).first()
 
         if like_filter is None:
-            new_like = LikePost.objects.create(post_id=id, username=username)
-            post.no_of_likes = post.no_of_likes + 1
+            LikePost.objects.create(post_id=id, username=username)
+            post.no_of_likes += 1
         else:
             like_filter.delete()
-            post.no_of_likes = post.no_of_likes - 1
+            post.no_of_likes -= 1
 
         post.save()
-        # return redirect('/')
-        return redirect('/#'+str(id))
+
+        return redirect(f'/home/#post{id}')
 
 @login_required(login_url='/login')
 def home(request):
@@ -158,9 +138,8 @@ def profile(request, id_user):
     user_object = User.objects.get(username=id_user)
 
     # safe profile get
-    user_profile, created = Profile.objects.get_or_create(user=user_object) #Profile.objects.get_or_create(user=user_object)
+    user_profile, created = Profile.objects.get_or_create(user=user_object) 
 
-    # user_posts = Post.objects.filter(user=user_object).order_by('-created_at')
     user_posts = Post.objects.filter(user=id_user).order_by('-created_at')
     
        
@@ -174,8 +153,7 @@ def profile(request, id_user):
         follow_unfollow = 'Unfollow'
     else:
         follow_unfollow = 'Follow'
-    # user_followers = len(Followers.objects.filter(user=id_user))
-    # user_following = len(Followers.objects.filter(follower=id_user))
+
     user_followers = Followers.objects.filter(user=id_user).count()
     user_following = Followers.objects.filter(followers=id_user).count()
         
@@ -265,5 +243,3 @@ def search_results(request):
 def logout_view(request):
     auth_logout(request)
     return redirect('/login')
-
-
