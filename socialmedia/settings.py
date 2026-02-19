@@ -113,8 +113,8 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 import os
 STATIC_URL = '/static/'
@@ -126,9 +126,9 @@ import cloudinary.uploader
 import cloudinary.api
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'paste_your_cloud_name',
-    'API_KEY': 'paste_your_api_key',
-    'API_SECRET': 'paste_your_api_secret',
+    'CLOUD_NAME': 'ddbat9gro',
+    'API_KEY': '719256419821647',
+    'API_SECRET': 'OsucQDwX0gTQQK-dyFZYxzSR7r8',
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
