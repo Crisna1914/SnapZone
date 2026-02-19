@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404, redirect
 from .models import Post
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as auth_logout
-
+import cloudinary.uploader
 
 def landing(request):
     return render(request, 'landing.html')
@@ -212,19 +212,38 @@ def follow(request):
     else:
      return redirect('/')    
 
+# @login_required(login_url='/login')
+# def delete(request, id):
+#     print("DELETE ID:", id)
+
+#     post = get_object_or_404(Post, id=id)
+
+#     # 🔥 FIX HERE
+#     if post.user == request.user.username:
+#         post.delete()
+#         print("DELETED SUCCESS")
+
+#     return redirect('/profile/' + request.user.username)
+
 @login_required(login_url='/login')
 def delete(request, id):
-    print("DELETE ID:", id)
-
     post = get_object_or_404(Post, id=id)
 
-    # 🔥 FIX HERE
+    # check owner
     if post.user == request.user.username:
+
+        # delete image from cloudinary
+        try:
+            if post.image:
+                cloudinary.uploader.destroy(post.image.public_id)
+        except Exception as e:
+            print("Cloudinary delete error:", e)
+
+        # delete post from database
         post.delete()
         print("DELETED SUCCESS")
 
     return redirect('/profile/' + request.user.username)
-
 
 @login_required(login_url='/login')
 def search_results(request):

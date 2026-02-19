@@ -121,14 +121,13 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
 
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'ddbat9gro',
-    'API_KEY': '719256419821647',
-    'API_SECRET': 'OsucQDwX0gTQQK-dyFZYxzSR7r8',
-}
+import cloudinary
+
+cloudinary.config(
+    cloud_name="ddbat9gro",
+    api_key="719256419821647",
+    api_secret="OsucQDwX0gTQQK-dyFZYxzSR7r8"
+)
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
